@@ -1,0 +1,30 @@
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon1">Search Employee By name</span>
+  </div>
+  <input #search (change)="0" type="text" class="form-control"  aria-label="Username" aria-describedby="basic-addon1">
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Id</th>
+      <th scope="col">Name</th>
+      <th scope="col">Salary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let employee of employees | filterEmployee: search.value; let i= index">
+      <th scope="row">{{i+1}}</th>
+      <!--td>{{employee.id}}</td-->
+      <td title="Edit">
+        <a routerLink="/add/{{employee.id}}">{{employee.id}}</a>
+      </td>
+      <td>{{employee.name}}</td>
+      <td>{{employee.salary}}</td>
+    </tr>
+    
+  </tbody>
+</table>
