@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Http } from '@angular/http';
 import { EmployeeService } from '../../services/employee.service';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute} from "@angular/router";
 
 
 @Component({
@@ -17,15 +17,30 @@ export class AddEmployeeComponent implements OnInit {
   alertClass: string = "alert alert-success"
 
   genders: Array<string> = ['Male', 'Female']
-  id: number;
 
-  constructor(private employeeService: EmployeeService, private route: ActivatedRoute) { }
+  constructor(private employeeService: EmployeeService, private activatedRoute: ActivatedRoute) {
+    this.activatedRoute.params.subscribe( params => {
+      if(params.id){
+        this.fetchEmployee(params.id) 
+      }
+    });
+  }
 
+  fetchEmployee(id: number){
+    this.employeeService.fetchEmployee(id)
+    .then(data => {
+      console.log(data);
+      this.myForm.controls['id'].setValue(data.id)
+      this.myForm.controls['name'].setValue( data.name);
+      this.myForm.controls['salary'].setValue( data.salary);
+    })
+  }
 
 
   ngOnInit() {
 
-      this.myForm = new FormGroup({     
+      this.myForm = new FormGroup({  
+              'id': new FormControl('' ),   
               'name': new FormControl('', [Validators.required] ),
               'salary': new FormControl('', Validators.required)
           // 'password': new FormControl('', Validators.pattern("^[a-zA-Z0-9!@#$%^&*]{6,16}$")),
@@ -35,43 +50,7 @@ export class AddEmployeeComponent implements OnInit {
 
       this.myForm.statusChanges.subscribe((data: any) => console.log(data));
 
-
-      const id = +this.route.snapshot.paramMap.get('id');
-      //const name = +this.route.snapshot.paramMap.get('name');
-      console.log("id---------->"+id);
-      if(+id >= 0){
-      //if(name != 0){
-          // this.title = `Edit User`;
-          this.id = +id;
-          //this.name = name.toString();
-          this.getEmployee(this.id);
-      }
   }
-
-  getEmployee(id) {
-    console.log('index getEmployee------>'+id);
-      this.employeeService.getEmployee(id)
-          .then(res => {
-              console.log(res);
-              //this.myForm = res;
-              
-            //   if (res.success == true) {
-            //       this.user = res.data;
-            //   }
-          }, err => {
-              console.log('server err');
-              console.log(err);
-          })
-          .catch(err => {
-              console.log('client err');
-              console.log(err);
-          })
-  }
-  // this.employeeService.fetchEmployees()
-  // .then((data)=>{
-  //   console.log(data);
-  //   this.employees = data;
-  // })
 
   onSubmit() {
       console.log(this.myForm);
@@ -91,6 +70,13 @@ export class AddEmployeeComponent implements OnInit {
           this.message = "Employee already exists!!"
         }
       })
+  }
+  updateEmployee() {
+      console.log(this.myForm);
+      console.log(this.myForm.value);
+      this.employeeService.updateEmployee(this.myForm.value)
+      .then((data) => console.log(data))
+      
   }
 
 

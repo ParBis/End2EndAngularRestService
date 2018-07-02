@@ -10,6 +10,8 @@ import { Employee } from '../../model/Employee';
 export class ViewEmployeesComponent implements OnInit {
 
   employees: Array<Employee> = []
+  message:string = ''
+  alertClass: string = "alert alert-success"
 
   constructor(private employeeService: EmployeeService) { }
 
@@ -19,6 +21,20 @@ export class ViewEmployeesComponent implements OnInit {
       console.log(data);
       this.employees = data;
     })
+
+  }
+
+  deleteEmployee(index: number){
+    this.employeeService.deleteEmployee(index)
+    .then((data)=>{
+      console.log(data)
+    })
+    .catch((err)=>{
+      if(err.status == 410){
+        this.alertClass = "alert alert-success"
+        this.message = "Employee deleted successfully!!"
+      }
+      console.log(err)});
   }
 
 }

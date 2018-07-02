@@ -9,11 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,6 +37,16 @@ public class EmployeeRestController {
 //	    return employees;
 	}
 	
+	@RequestMapping(path="/employee/{id}", method=RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<Employee>fetchEmployee(@PathVariable("id") int id){
+		Employee employee = repository.findEmployee(id);
+		System.out.println("Employe the REST controller");
+		System.out.println(employee);
+		return new ResponseEntity<Employee>(employee, HttpStatus.OK);
+//	    return employees;
+	}
+	
 	@RequestMapping(value = "/employee", method = RequestMethod.POST)
 	public ResponseEntity<Void> createEmployee(@RequestBody Employee employee) {
 		System.out.println("Creating Employee " + employee);
@@ -54,16 +62,27 @@ public class EmployeeRestController {
 	
 	}
 	
-	//@RequestMapping(path="/fetchEmployeeById/{idSt}", method=RequestMethod.GET)
-	@RequestMapping(path="/fetchEmployeeById", method=RequestMethod.GET)
-	@ResponseBody
-	//public ResponseEntity<Employee>fetchEmployeeById( @PathVariable("idSt") String idSt){
-	public ResponseEntity<Employee>fetchEmployeeById(@RequestParam String idSt){
-		Employee employee = repository.findById(idSt);
-		System.out.println("fetchEmployeeById the REST controller");
-		System.out.println(employee);
-		return new ResponseEntity<Employee>(employee, HttpStatus.OK);
-//	    return employees;
+	@RequestMapping(value = "/employee", method = RequestMethod.PUT)
+	public ResponseEntity<Void> updateEmployee(@RequestBody Employee employee) {
+		System.out.println("Creating Employee " + employee);
+		
+		try{
+			repository.updateEmployee(employee);
+			return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+		}
+		catch(NoResultException nre){
+			repository.addEmployee(employee);
+			return new ResponseEntity<Void>(HttpStatus.CREATED);
+		}	
+	
+	}
+	
+	
+	@RequestMapping(value = "/employee/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> deleteEmployee(@PathVariable("id") int id){
+		System.out.println("ID recieved : " + id);
+		repository.removeEmployee(id);
+		return new ResponseEntity<Void>(HttpStatus.GONE);
 	}
 
 

@@ -12,7 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 const routes = [
   {path:"", component: ViewEmployeesComponent},
   {path:"add", component: AddEmployeeComponent},
-  { path: 'add/:id', component: AddEmployeeComponent }
+  {path:"edit/:id", component: AddEmployeeComponent},
 ]
 @NgModule({
   declarations: [

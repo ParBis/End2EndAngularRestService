@@ -4,32 +4,26 @@ import { Employee } from '../model/Employee';
 
 @Injectable()
 export class EmployeeService {
-  idst: string;
+
   constructor(private http: Http) { }
 
   fetchEmployees(): Promise<any>{
     return this.http.get('http://localhost:8082/05springmvc/api/employees').toPromise()
     .then(res=>res.json())
   }
+  fetchEmployee(id: number): Promise<any>{
+    return this.http.get('http://localhost:8082/05springmvc/api/employee/'+id).toPromise()
+    .then(res=>res.json())
+  }
+  updateEmployee(employee:Employee){
+    return this.http.put('http://localhost:8082/05springmvc/api/employee', employee).toPromise()
+  }
 
   addEmployee(employee:Employee): Promise<any>{
     return this.http.post('http://localhost:8082/05springmvc/api/employee', employee).toPromise()
   }
 
-  getEmployee(id: number): Promise<any>{
-    this.idst = id.toString();
-    console.log("this.idst--------->" + this.idst);
-    //return this.http.get('http://localhost:8082/05springmvc/api/fetchEmployeeById', {params:{idst: this.idst}}).toPromise()
-    return this.http.get('http://localhost:8082/05springmvc/api/fetchEmployeeById', this.idst).toPromise()
-    //return this.http.get(`http://localhost:8082/05springmvc/api/fetchEmployeeById/${this.idst}`).toPromise()
-    .then(res=>res.json())
+  deleteEmployee(index:number): Promise<any>{
+    return this.http.delete('http://localhost:8082/05springmvc/api/employee/'+index).toPromise()
   }
-  // getEmployee(index: number): Promise<any> {
-  //   return this.http.get(`http://localhost:8082/05springmvc/api/getemployee/${index}`).toPromise()
-  //       .then(response => {
-  //           return response.json();
-  //       })
-  //       .catch(err => err);
-  // }
-
 }

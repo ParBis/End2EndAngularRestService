@@ -12,7 +12,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQuery(name="findEmployeeByName", query="select e from Employee e where e.name=:name")
 @NamedQuery(name="findEmployeeBySalary", query="select e from Employee e where e.salary > :salary")
 @NamedQuery(name="findEmployees", query="from Employee e")
-@NamedQuery(name="findEmployeeById", query="select e from Employee e where e.id = :id")
 @XmlRootElement
 public class Employee {
 	

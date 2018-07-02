@@ -4,3 +4,10 @@ CREATE TABLE `employee` (
   `EMP_SALARY` double DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+
+id - root
+pwd - root
+
+Database schema - cogdb
